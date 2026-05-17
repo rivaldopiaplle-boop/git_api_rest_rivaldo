@@ -72,6 +72,12 @@ VITE_API_URL=http://localhost:3000/api
 VITE_API_KEY=change_me_to_match_backend
 ```
 
+Déploiement Netlify:
+
+- `VITE_API_URL` doit pointer vers l'URL publique du backend, pas vers `localhost`.
+- `VITE_API_KEY` doit contenir la même valeur que `API_KEY` côté backend.
+- Si `VITE_API_URL` est absent en production, le frontend appellera `/api` sur le même domaine.
+
 ## Lancer le projet
 
 Depuis la racine:
@@ -106,6 +112,8 @@ npm run dev
 Header requis:
 
 - `x-api-key: <valeur>`
+
+Si `API_KEY` n'est pas défini côté backend, les routes `/api` répondent avec une erreur de configuration au lieu d'accepter les requêtes.
 
 Pour afficher temporairement la clé dans la liste, le frontend demande:
 
