@@ -1,0 +1,57 @@
+[
+  {
+    "id": "958edafe-18d4-44f6-ba58-91a47da081cc",
+    "name": "Rivaldo",
+    "category": "ui",
+    "description": "",
+    "calories": 1,
+    "tags": [],
+    "apiKey": "4a567d9c202e250d6f881f01adb29d5aeb5dba7fd3a1e005",
+    "createdAt": "2026-05-17T22:52:40.433Z",
+    "updatedAt": "2026-05-17T22:52:40.433Z"
+  },
+  {
+    "id": "c0c7b0c4-315c-4dbb-8f14-823346e5c3a9",
+    "name": "TestFruit",
+    "category": "fruit",
+    "description": "",
+    "calories": 10,
+    "tags": [],
+    "apiKey": "9a8413dd961cddef4426d6e83d1189bb552c7c49e04775b3",
+    "createdAt": "2026-05-17T23:01:15.931Z",
+    "updatedAt": "2026-05-17T23:01:15.934Z"
+  },
+  {
+    "id": "899e4f71-e168-4a27-985b-54d595c28b7f",
+    "name": "Rivaldo",
+    "category": "ui",
+    "description": "",
+    "calories": 3,
+    "tags": [],
+    "apiKey": "d856a1404482055635b4d2de84082283cc184cabb0912310",
+    "createdAt": "2026-05-17T23:01:23.076Z",
+    "updatedAt": "2026-05-17T23:01:23.076Z"
+  },
+  {
+    "id": "e44fd24a-11b4-4c1d-b334-c71784fb8318",
+    "name": "piaplle",
+    "category": "ui",
+    "description": "",
+    "calories": 2,
+    "tags": [],
+    "apiKey": "9b6e9e995956eac4a5b22fe345cfd0e7a72a5ac031c6e0db",
+    "createdAt": "2026-05-17T23:01:45.381Z",
+    "updatedAt": "2026-05-17T23:01:45.381Z"
+  },
+  {
+    "id": "40c7c694-db86-451c-9d3f-d4f4795749e3",
+    "name": "Frand",
+    "category": "ui",
+    "description": "",
+    "calories": 1,
+    "tags": [],
+    "apiKey": "23420b4531ccc2c75c91c4ecbea380fa960a183a7338e24a",
+    "createdAt": "2026-05-17T23:17:37.698Z",
+    "updatedAt": "2026-05-17T23:17:37.698Z"
+  }
+]

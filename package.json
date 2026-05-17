@@ -1,0 +1,13 @@
+{
+  "name": "api-rest-n8n-rivaldo",
+  "private": true,
+  "workspaces": [
+    "api-rest-backend",
+    "api-rest-frontend"
+  ],
+  "scripts": {
+    "dev:backend": "npm run dev --workspace api-rest-backend",
+    "dev:frontend": "npm run dev --workspace api-rest-frontend",
+    "install:all": "npm install --workspaces"
+  }
+}
