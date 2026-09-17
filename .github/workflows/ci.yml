@@ -1,0 +1,94 @@
+# Intégration continue de l'API.
+#
+# Trois vérifications, dans l'ordre où elles coûtent de plus en plus cher :
+#
+#   1. le schéma Prisma est valide et le client se génère ;
+#   2. l'application se construit ;
+#   3. l'API répond vraiment : migrations appliquées sur un PostgreSQL réel,
+#      base amorcée, application démarrée, puis les tests l'interrogent en HTTP.
+#
+# La clé d'API des tests est fabriquée ici même : elle ne sert qu'à la durée de
+# l'exécution, et aucun secret du dépôt n'est nécessaire.
+
+name: Integration continue
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  api:
+    name: Schéma, construction et API
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_PASSWORD: motdepasse-ci
+          POSTGRES_DB: foods
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres -d foods"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+
+    env:
+      DATABASE_URL: postgresql://postgres:motdepasse-ci@localhost:5432/foods
+      DIRECT_URL: postgresql://postgres:motdepasse-ci@localhost:5432/foods
+      API_KEY: cle-de-la-chaine-integration
+      BASE_URL: http://localhost:3000
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Installation
+        run: npm ci
+
+      - name: Le schéma Prisma est valide
+        run: npx prisma validate
+
+      - name: Client Prisma
+        run: npx prisma generate
+
+      - name: Migrations sur une base réelle
+        run: npx prisma migrate deploy
+
+      - name: Jeu de démonstration
+        run: npx prisma db seed
+
+      - name: Construction
+        run: npm run build
+
+      - name: Démarrer l'application
+        run: |
+          nohup npm start > /tmp/application.log 2>&1 &
+          # Le démarrage prend quelques secondes : on attend la sonde de santé
+          # plutôt qu'un délai fixe, qui serait trop court ou trop long.
+          for essai in $(seq 1 60); do
+            if curl -fsS "$BASE_URL/api/health" | grep -q '"database":"connected"'; then
+              echo "L'application répond et la base est connectée."
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "L'application n'a pas répondu en 60 secondes." >&2
+          cat /tmp/application.log
+          exit 1
+
+      - name: Tests de l'API en HTTP
+        # Le motif, plutôt que le dossier : Node prend alors chaque fichier de test.
+        run: node --test "tests/**/*.test.mjs"

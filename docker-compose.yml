@@ -1,0 +1,19 @@
+# La base de travail, en local. La même structure que celle de la mise en ligne,
+# appliquée par les migrations Prisma.
+#
+#   docker compose up -d --wait
+#
+# Le port 5434 évite les autres bases des projets voisins.
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_PASSWORD: motdepasse-local
+      POSTGRES_DB: foods
+    ports:
+      - "5434:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d foods"]
+      interval: 3s
+      timeout: 3s
+      retries: 20

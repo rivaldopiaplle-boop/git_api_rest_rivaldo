@@ -1,0 +1,48 @@
+@baseUrl = http://localhost:3000
+@apiKey = change_me_to_a_secret_value
+@foodId = replace-with-a-real-id
+
+### Health check
+GET {{baseUrl}}/api/health
+
+### Auth check
+GET {{baseUrl}}/api/auth
+x-api-key: {{apiKey}}
+
+### List foods
+GET {{baseUrl}}/api/foods
+x-api-key: {{apiKey}}
+
+### List foods with API keys
+GET {{baseUrl}}/api/foods?includeApiKey=true
+x-api-key: {{apiKey}}
+
+### Create food
+POST {{baseUrl}}/api/foods
+x-api-key: {{apiKey}}
+Content-Type: application/json
+
+{
+  "name": "Roasted carrot bowl",
+  "category": "Lunch",
+  "description": "Simple bowl built for quick tests",
+  "calories": 320,
+  "tags": ["warm", "healthy", "quick"]
+}
+
+### Update food
+PUT {{baseUrl}}/api/foods/{{foodId}}
+x-api-key: {{apiKey}}
+Content-Type: application/json
+
+{
+  "name": "Roasted carrot bowl v2",
+  "category": "Lunch",
+  "description": "Updated by REST Client",
+  "calories": 340,
+  "tags": ["warm", "updated"]
+}
+
+### Delete food
+DELETE {{baseUrl}}/api/foods/{{foodId}}
+x-api-key: {{apiKey}}

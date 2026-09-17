@@ -1,141 +1,91 @@
-# API Rest N8N Rivaldo
+# API REST avec Next.js et Prisma
 
-Projet séparé en deux applications:
+[![Integration continue](https://github.com/rivaldopiaplle-boop/git_api_rest_rivaldo/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/rivaldopiaplle-boop/git_api_rest_rivaldo/actions/workflows/ci.yml?query=branch%3Amain)
 
-- `api-rest-backend` pour l'API Node.js / Express
-- `api-rest-frontend` pour l'interface React / Vite
+Une API REST protégée par clé, et l'interface d'administration qui va avec, dans une seule
+application Next.js. Les données vivent dans PostgreSQL, à travers Prisma.
 
-Le backend utilise un stockage JSON local et génère une `apiKey` par aliment.
+Le projet a commencé en Express, avec les données dans un fichier JSON. C'était parfait
+pour apprendre, beaucoup moins pour tenir en ligne : deux visiteurs qui écrivent en même
+temps, et le fichier se marche dessus. L'historique du dépôt garde cette première version.
 
-Le dépôt racine fonctionne aussi comme workspace npm pour lancer les deux apps depuis la racine.
+## Ce que l'API expose
 
-## Structure
+| Route | Verbe | Ce qu'elle fait |
+| --- | --- | --- |
+| `/api/health` | GET | Sonde de santé : elle interroge vraiment la base (`SELECT 1`) |
+| `/api/foods` | GET | Liste les plats. Clé exigée |
+| `/api/foods` | POST | Crée un plat, valide le corps, renvoie sa clé propre |
+| `/api/foods/[id]` | GET | Un plat |
+| `/api/foods/[id]` | PUT | Remplace le plat : corps complet attendu |
+| `/api/foods/[id]` | PATCH | Ne change que les champs envoyés |
+| `/api/foods/[id]` | DELETE | Supprime le plat |
 
-- `api-rest-backend/`
-  - `server.js`
-  - `routers/foods.js`
-  - `middlewares/apiKey.js`
-  - `db/foodsStore.js`
-  - `data/foods.json`
-  - `postman/`
-- `api-rest-frontend/`
-  - `src/App.jsx`
-  - `src/api.js`
-
-## Prérequis
-
-- Node.js 18+
-- npm
-- Postman pour les tests API
-
-## Installation
-
-Depuis la racine du dépôt:
+La clé se donne dans l'en-tête `x-api-key`. Sans elle, ou avec une mauvaise clé, l'API
+répond 401 sans rien révéler. L'interface d'administration, elle, passe par des actions
+serveur et parle directement à Prisma.
 
 ```bash
-npm install
+curl -s http://localhost:3000/api/foods -H "x-api-key: $API_KEY"
+curl -s -X POST http://localhost:3000/api/foods \
+  -H "x-api-key: $API_KEY" -H "Content-Type: application/json" \
+  -d '{"name":"Ndole aux crevettes","category":"Plat principal","calories":640,"tags":"cameroun, poisson"}'
 ```
 
-Ou seulement les espaces de travail:
+## Lancer en local
+
+Prérequis : Docker et Node 20.
 
 ```bash
-npm run install:all
+node demarrer.mjs
 ```
 
-Backend:
+Il monte PostgreSQL dans Docker, génère le client Prisma, applique les migrations, amorce
+le jeu de démonstration, construit l'application et attend qu'elle réponde. L'interface
+s'ouvre alors sur http://localhost:3000.
 
 ```bash
-cd api-rest-backend
-npm install
+node demarrer.mjs --tests     # démarre, joue les tests d'API en HTTP, s'arrête
+node demarrer.mjs --arreter   # arrête la base et supprime ses données
 ```
 
-Frontend:
+Le fichier `.env` n'est pas suivi par Git. Au premier lancement, il est créé depuis
+`.env.example`, qui pointe déjà sur la base locale.
+
+## Les tests
+
+`tests/api.test.mjs` parle à l'application en HTTP, comme le fera son client : la clé
+exigée, un nom vide refusé par le serveur, et le cycle complet d'une ressource, création,
+lecture, modification partielle, suppression, puis 404.
 
 ```bash
-cd api-rest-frontend
-npm install
+node --test "tests/**/*.test.mjs"    # l'application doit tourner
 ```
 
-## Variables d'environnement
+## La chaîne d'intégration
 
-Backend: [api-rest-backend/.env](api-rest-backend/.env)
+À chaque poussée, dans l'ordre où les vérifications coûtent de plus en plus cher :
 
-```env
-API_KEY=change_me_to_match_backend
-PORT=3000
-```
+1. le schéma Prisma est valide et le client se génère ;
+2. l'application se construit ;
+3. les migrations s'appliquent sur un PostgreSQL réel, la base est amorcée, l'application
+   démarre, et les tests l'interrogent en HTTP.
 
-Frontend: [api-rest-frontend/.env.local](api-rest-frontend/.env.local)
+La clé d'API des tests est fabriquée dans la chaîne : aucun secret du dépôt n'est
+nécessaire.
 
-```env
-VITE_API_URL=http://localhost:3000/api
-VITE_API_KEY=change_me_to_match_backend
-```
+## Mettre en ligne
 
-Déploiement Netlify:
+Next.js et Prisma se déploient chez Vercel, avec une base PostgreSQL gratuite chez Neon.
 
-- `VITE_API_URL` doit pointer vers l'URL publique du backend, pas vers `localhost`.
-- `VITE_API_KEY` doit contenir la même valeur que `API_KEY` côté backend.
-- Si `VITE_API_URL` est absent en production, le frontend appellera `/api` sur le même domaine.
+1. Créer un projet sur [neon.tech](https://neon.tech). Il donne deux adresses : celle qui
+   passe par le regroupeur de connexions, pour l'application, et la connexion directe,
+   pour les migrations.
+2. Sur [vercel.com](https://vercel.com), importer ce dépôt. Vercel reconnaît Next.js.
+3. Poser trois variables d'environnement : `DATABASE_URL`, `DIRECT_URL` et `API_KEY`.
+4. Appliquer les migrations sur la base en ligne, depuis le poste de travail :
+   `DATABASE_URL=... DIRECT_URL=... npx prisma migrate deploy`, puis `npx prisma db seed`
+   pour le jeu de démonstration.
 
-## Lancer le projet
-
-Depuis la racine:
-
-```bash
-npm run dev:backend
-npm run dev:frontend
-```
-
-Backend:
-
-```bash
-cd api-rest-backend
-npm run dev
-```
-
-Frontend:
-
-```bash
-cd api-rest-frontend
-npm run dev
-```
-
-## API
-
-- `GET /api/foods`
-- `POST /api/foods`
-- `PUT /api/foods/:id`
-- `DELETE /api/foods/:id`
-- `GET /api/foods/:id/api-key`
-
-Header requis:
-
-- `x-api-key: <valeur>`
-
-Si `API_KEY` n'est pas défini côté backend, les routes `/api` répondent avec une erreur de configuration au lieu d'accepter les requêtes.
-
-Pour afficher temporairement la clé dans la liste, le frontend demande:
-
-- `GET /api/foods?includeApiKey=true`
-
-## Postman
-
-Importer les fichiers suivants:
-
-- [api-rest-backend/postman/foods-api.postman_collection.json](api-rest-backend/postman/foods-api.postman_collection.json)
-- [api-rest-backend/postman/foods-api.postman_environment.json](api-rest-backend/postman/foods-api.postman_environment.json)
-
-## Git
-
-Le dépôt ignore automatiquement:
-
-- `node_modules`
-- fichiers `.env` et `.local`
-- dossiers `dist`, `build`, `coverage`
-
-## Remarques
-
-- Le backend stocke les aliments dans `api-rest-backend/data/foods.json`.
-- Chaque aliment possède sa propre `apiKey` générée par le store.
-- Ne mets pas `node_modules` dans Git.
+Neon met la base en veille quand personne ne l'interroge, mais la réveille seule à la
+première requête : pas de restauration à faire à la main.

@@ -1,13 +1,23 @@
 {
   "name": "api-rest-n8n-rivaldo",
   "private": true,
-  "workspaces": [
-    "api-rest-backend",
-    "api-rest-frontend"
-  ],
   "scripts": {
-    "dev:backend": "npm run dev --workspace api-rest-backend",
-    "dev:frontend": "npm run dev --workspace api-rest-frontend",
-    "install:all": "npm install --workspaces"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "prisma db seed",
+    "db:studio": "prisma studio"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.cjs"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.0.0",
+    "next": "^15.0.0",
+    "prisma": "^6.0.0",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6"
   }
 }
