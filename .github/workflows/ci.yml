@@ -90,5 +90,6 @@ jobs:
           exit 1
 
       - name: Tests de l'API en HTTP
-        # Le motif, plutôt que le dossier : Node prend alors chaque fichier de test.
-        run: node --test "tests/**/*.test.mjs"
+        # Le chemin exact : la forme « dossier » et les motifs dépendent de la
+        # version de Node, le fichier nommé fonctionne partout.
+        run: node --test tests/api.test.mjs

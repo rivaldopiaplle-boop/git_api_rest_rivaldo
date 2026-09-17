@@ -128,7 +128,7 @@ console.log(`  OK  L'application répond sur ${ADRESSE}`);
 
 if (veutTests) {
   console.log("\n-- Tests de l'API");
-  const reussi = etape("node", ["--test", "tests/**/*.test.mjs"], { ...variables, BASE_URL: ADRESSE });
+  const reussi = etape("node", ["--test", "tests/api.test.mjs"], { ...variables, BASE_URL: ADRESSE });
   serveur.kill();
   console.log(reussi ? "\n  Tests passés.\n" : "\n  Tests en échec.\n");
   process.exit(reussi ? 0 : 1);

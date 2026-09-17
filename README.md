@@ -59,7 +59,7 @@ exigée, un nom vide refusé par le serveur, et le cycle complet d'une ressource
 lecture, modification partielle, suppression, puis 404.
 
 ```bash
-node --test "tests/**/*.test.mjs"    # l'application doit tourner
+node --test tests/api.test.mjs    # l'application doit tourner
 ```
 
 ## La chaîne d'intégration
