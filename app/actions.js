@@ -26,7 +26,7 @@ function extractPayload(formData) {
 }
 
 export async function createFoodAction(formData) {
-  let destination = buildQuery("status", "Food created successfully");
+  let destination = buildQuery("status", "Plat ajouté.");
 
   try {
     const payload = extractPayload(formData);
@@ -38,7 +38,7 @@ export async function createFoodAction(formData) {
         Object.values(error.details).join(" | "),
       );
     } else {
-      destination = buildQuery("error", "Unable to create food");
+      destination = buildQuery("error", "Le plat n'a pas pu être ajouté.");
     }
   }
 
@@ -46,14 +46,14 @@ export async function createFoodAction(formData) {
 }
 
 export async function updateFoodAction(formData) {
-  let destination = buildQuery("status", "Food updated successfully");
+  let destination = buildQuery("status", "Plat modifié.");
 
   try {
     const payload = extractPayload(formData);
     const updated = await updateFood(payload.id, payload);
 
     if (!updated) {
-      destination = buildQuery("error", "Food not found");
+      destination = buildQuery("error", "Plat introuvable.");
     }
   } catch (error) {
     if (error instanceof ValidationError) {
@@ -62,7 +62,7 @@ export async function updateFoodAction(formData) {
         Object.values(error.details).join(" | "),
       );
     } else {
-      destination = buildQuery("error", "Unable to update food");
+      destination = buildQuery("error", "Le plat n'a pas pu être modifié.");
     }
   }
 
@@ -70,17 +70,17 @@ export async function updateFoodAction(formData) {
 }
 
 export async function deleteFoodAction(formData) {
-  let destination = buildQuery("status", "Food deleted successfully");
+  let destination = buildQuery("status", "Plat supprimé.");
 
   try {
     const payload = extractPayload(formData);
     const deleted = await deleteFood(payload.id);
 
     if (!deleted) {
-      destination = buildQuery("error", "Food not found");
+      destination = buildQuery("error", "Plat introuvable.");
     }
   } catch {
-    destination = buildQuery("error", "Unable to delete food");
+    destination = buildQuery("error", "Le plat n'a pas pu être supprimé.");
   }
 
   redirect(destination);

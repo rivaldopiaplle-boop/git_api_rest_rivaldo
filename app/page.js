@@ -24,7 +24,7 @@ function getMessage(searchParams) {
 
 function formatTags(tags) {
   if (!Array.isArray(tags) || tags.length === 0) {
-    return "No tags";
+    return "Aucune étiquette";
   }
 
   return tags.join(", ");
@@ -45,26 +45,26 @@ export default async function Home({ searchParams }) {
       <section className="hero">
         <div>
           <p className="eyebrow">Next.js + Prisma + PostgreSQL</p>
-          <h1 className="title">Food admin with a clean Prisma singleton.</h1>
+          <h1 className="title">Une API protégée par clé, et son administration.</h1>
           <p className="lead">
-            One app, one database, one route layer. The admin uses server
-            actions directly on Prisma, while the API stays protected for REST
-            Client tests.
+            Une seule application : les routes de l'API d'un côté, cette
+            administration de l'autre, Prisma et PostgreSQL en dessous. L'administration
+            passe par des actions serveur, l'API garde son contrat par clé.
           </p>
         </div>
 
         <div className="stats">
           <div className="stat">
             <strong>{totalFoods}</strong>
-            <span>Foods stored in PostgreSQL</span>
+            <span>plats en base PostgreSQL</span>
           </div>
           <div className="stat">
             <strong>{totalCalories}</strong>
-            <span>Total calories across records</span>
+            <span>calories au total</span>
           </div>
           <div className="stat">
             <strong>{tagCount}</strong>
-            <span>Distinct tags in the catalog</span>
+            <span>étiquettes différentes</span>
           </div>
         </div>
       </section>
@@ -77,27 +77,27 @@ export default async function Home({ searchParams }) {
         <article className="panel">
           <div className="panel-inner">
             <div className="panel-header">
-              <h2 className="panel-title">Create a food</h2>
+              <h2 className="panel-title">Ajouter un plat</h2>
             </div>
 
             <form action={createFoodAction} className="form-grid">
               <div className="field">
-                <label htmlFor="name">Name</label>
+                <label htmlFor="name">Nom</label>
                 <input
                   id="name"
                   name="name"
-                  placeholder="Roasted vegetables"
+                  placeholder="Légumes rôtis"
                   required
                   maxLength={200}
                 />
               </div>
 
               <div className="field">
-                <label htmlFor="category">Category</label>
+                <label htmlFor="category">Catégorie</label>
                 <input
                   id="category"
                   name="category"
-                  placeholder="Dinner"
+                  placeholder="Plat principal"
                   required
                 />
               </div>
@@ -107,7 +107,7 @@ export default async function Home({ searchParams }) {
                 <textarea
                   id="description"
                   name="description"
-                  placeholder="Short description"
+                  placeholder="Description courte"
                   maxLength={1000}
                 />
               </div>
@@ -134,8 +134,8 @@ export default async function Home({ searchParams }) {
               </div>
 
               <div className="actions">
-                <button type="submit">Create food</button>
-                <span className="field-title">Tags are comma separated.</span>
+                <button type="submit">Ajouter</button>
+                <span className="field-title">Les étiquettes se séparent par des virgules.</span>
               </div>
             </form>
           </div>
@@ -144,16 +144,16 @@ export default async function Home({ searchParams }) {
         <section className="panel">
           <div className="panel-inner">
             <div className="panel-header">
-              <h2 className="panel-title">Stored foods</h2>
+              <h2 className="panel-title">Plats enregistrés</h2>
               <span className="field-title">
-                Protected API keeps the same x-api-key contract.
+                L'API garde son contrat : en-tête x-api-key exigé.
               </span>
             </div>
 
             <div className="foods">
               {foods.length === 0 ? (
                 <div className="food-card">
-                  <strong>No foods yet.</strong>
+                  <strong>Aucun plat pour l'instant.</strong>
                   <p className="lead">
                     Create the first one on the left to bootstrap the seed.
                   </p>
@@ -171,25 +171,25 @@ export default async function Home({ searchParams }) {
                         <span className="pill">{formatTags(food.tags)}</span>
                       </div>
                     </div>
-                    <span className="pill">API key kept</span>
+                    <span className="pill">clé conservée</span>
                   </div>
 
                   <div className="meta">
                     <div>
-                      <strong>Description:</strong>{" "}
-                      {food.description || "No description"}
+                      <strong>Description :</strong>{" "}
+                      {food.description || "Aucune description"}
                     </div>
                     <div>
-                      <strong>API key:</strong> {food.apiKey}
+                      <strong>Clé d'API :</strong> {food.apiKey}
                     </div>
                     <div>
-                      <strong>Updated:</strong>{" "}
+                      <strong>Modifié le :</strong>{" "}
                       {new Date(food.updatedAt).toLocaleString("fr-FR")}
                     </div>
                   </div>
 
                   <details className="edit-box">
-                    <summary className="field-title">Edit this food</summary>
+                    <summary className="field-title">Modifier ce plat</summary>
 
                     <form
                       action={updateFoodAction}
@@ -199,7 +199,7 @@ export default async function Home({ searchParams }) {
                       <input type="hidden" name="id" value={food.id} />
 
                       <div className="field">
-                        <label htmlFor={`name-${food.id}`}>Name</label>
+                        <label htmlFor={`name-${food.id}`}>Nom</label>
                         <input
                           id={`name-${food.id}`}
                           name="name"
@@ -210,7 +210,7 @@ export default async function Home({ searchParams }) {
                       </div>
 
                       <div className="field">
-                        <label htmlFor={`category-${food.id}`}>Category</label>
+                        <label htmlFor={`category-${food.id}`}>Catégorie</label>
                         <input
                           id={`category-${food.id}`}
                           name="category"
@@ -255,7 +255,7 @@ export default async function Home({ searchParams }) {
                       </div>
 
                       <div className="actions">
-                        <button type="submit">Save changes</button>
+                        <button type="submit">Enregistrer</button>
                         <button
                           type="submit"
                           formAction={deleteFoodAction}

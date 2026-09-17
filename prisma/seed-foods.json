@@ -3,20 +3,28 @@
     "id": "9f1c2d64-4a2e-4d4b-9a2a-6c1f0a7d51b1",
     "name": "Poulet DG",
     "category": "Plat principal",
-    "description": "Poulet mijote avec plantains murs et legumes, plat de fete camerounais.",
+    "description": "Poulet mijoté avec plantains mûrs et légumes, plat de fête camerounais.",
     "calories": 720,
-    "tags": ["cameroun", "plantain", "poulet"],
+    "tags": [
+      "cameroun",
+      "plantain",
+      "poulet"
+    ],
     "apiKey": "d1f4b0c7a8e94e2fb35c6a1d9e0f7c3b5a28d41e6b7c9f02",
     "createdAt": "2026-05-02T09:12:00.000Z",
     "updatedAt": "2026-05-02T09:12:00.000Z"
   },
   {
     "id": "2b7a45e0-8c3f-4c17-b0d6-1f5e3a9c74d2",
-    "name": "Ndole aux crevettes",
+    "name": "Ndolé aux crevettes",
     "category": "Plat principal",
-    "description": "Feuilles de ndole, pate d'arachide et crevettes, servi avec du manioc.",
+    "description": "Feuilles de ndolé, pâte d'arachide et crevettes, servi avec du manioc.",
     "calories": 640,
-    "tags": ["cameroun", "arachide", "poisson"],
+    "tags": [
+      "cameroun",
+      "arachide",
+      "poisson"
+    ],
     "apiKey": "7c05e8a13d6b49f0ae21b7c8d5f3029e4a6b1c8d7e0f2359",
     "createdAt": "2026-05-02T09:18:00.000Z",
     "updatedAt": "2026-05-02T09:18:00.000Z"
@@ -25,9 +33,12 @@
     "id": "5d8e1af3-6b90-4f52-9c84-3a7d2e6b0c19",
     "name": "Galette de sarrasin",
     "category": "Plat principal",
-    "description": "Galette bretonne garnie jambon, oeuf et fromage.",
+    "description": "Galette bretonne garnie jambon, œuf et fromage.",
     "calories": 480,
-    "tags": ["bretagne", "sarrasin"],
+    "tags": [
+      "bretagne",
+      "sarrasin"
+    ],
     "apiKey": "a94f7e2b0c8d15a36f4b9e7c2d0a8b513e6f0c7d9a2b4e81",
     "createdAt": "2026-05-03T11:40:00.000Z",
     "updatedAt": "2026-05-03T11:40:00.000Z"
@@ -35,10 +46,13 @@
   {
     "id": "8c4b0d27-3e15-4a6f-9b72-5c1e8f0a3d64",
     "name": "Beignets haricots bouillie",
-    "category": "Petit dejeuner",
-    "description": "Le trio du matin : beignets, haricots et bouillie de mais.",
+    "category": "Petit déjeuner",
+    "description": "Le trio du matin : beignets, haricots et bouillie de maïs.",
     "calories": 560,
-    "tags": ["cameroun", "matin"],
+    "tags": [
+      "cameroun",
+      "matin"
+    ],
     "apiKey": "3e7d9c1b5a8f0246d7b3e9c5a1f8b0d24c6e8a0f3b5d7c92",
     "createdAt": "2026-05-04T06:30:00.000Z",
     "updatedAt": "2026-05-04T06:30:00.000Z"
@@ -46,10 +60,13 @@
   {
     "id": "6a2f8e51-9d07-4c3b-8e16-2b7d4a9c0f38",
     "name": "Salade de quinoa",
-    "category": "Entree",
+    "category": "Entrée",
     "description": "Quinoa, concombre, tomates cerises et feta, vinaigrette au citron.",
     "calories": 320,
-    "tags": ["vegetarien", "froid"],
+    "tags": [
+      "végétarien",
+      "froid"
+    ],
     "apiKey": "b58c2a7f0d9e13b64a8c0f2e7d5b9a13c8e0f4a6b2d7c591",
     "createdAt": "2026-05-05T12:05:00.000Z",
     "updatedAt": "2026-05-05T12:05:00.000Z"
@@ -58,9 +75,12 @@
     "id": "4e9d3b08-7c62-41f5-9a03-8d5b1e7c2a46",
     "name": "Far breton aux pruneaux",
     "category": "Dessert",
-    "description": "Flan epais aux pruneaux, recette de Bretagne.",
+    "description": "Flan épais aux pruneaux, recette de Bretagne.",
     "calories": 390,
-    "tags": ["bretagne", "dessert"],
+    "tags": [
+      "bretagne",
+      "dessert"
+    ],
     "apiKey": "c07b4e9a2d6f8153b0c7a9e4d2f6b8015a3c7e9d0b4f6a28",
     "createdAt": "2026-05-06T15:20:00.000Z",
     "updatedAt": "2026-05-06T15:20:00.000Z"
