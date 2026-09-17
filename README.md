@@ -83,6 +83,8 @@ Next.js et Prisma se déploient chez Vercel, avec une base PostgreSQL gratuite c
    pour les migrations.
 2. Sur [vercel.com](https://vercel.com), importer ce dépôt. Vercel reconnaît Next.js.
 3. Poser trois variables d'environnement : `DATABASE_URL`, `DIRECT_URL` et `API_KEY`.
+   La construction lance `prisma generate` elle-même : Vercel bloque les scripts
+   d'installation des dépendances, et sans cette génération le client Prisma manque.
 4. Appliquer les migrations sur la base en ligne, depuis le poste de travail :
    `DATABASE_URL=... DIRECT_URL=... npx prisma migrate deploy`, puis `npx prisma db seed`
    pour le jeu de démonstration.
