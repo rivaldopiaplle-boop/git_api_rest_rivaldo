@@ -319,3 +319,32 @@ button.danger {
   font-weight: 600;
   text-decoration: underline;
 }
+
+/* Les liens vers le dépôt et le portfolio, en tête : la première chose qu'un
+   visiteur venu d'ailleurs doit pouvoir trouver. */
+.liens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+}
+
+.lien {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.65rem 1.1rem;
+  border: 1px solid #1d1a16;
+  border-radius: 999px;
+  color: #1d1a16;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.lien.principal {
+  background: #1d1a16;
+  color: #fffaf3;
+}
+
+.lien:hover {
+  opacity: 0.85;
+}

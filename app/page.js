@@ -5,6 +5,12 @@ import {
 } from "./actions";
 import { listFoods } from "../lib/foods";
 
+// La page lit la base à chaque visite. Sans cette ligne, Next.js la pré-rend
+// pendant la construction, donc interroge la base à ce moment-là : chez
+// Vercel, où aucune base n'est joignable pendant le build, la construction
+// échouait avec « Error occurred prerendering page "/" ».
+export const dynamic = "force-dynamic";
+
 function getMessage(searchParams) {
   const success =
     typeof searchParams?.status === "string" ? searchParams.status : "";
@@ -51,6 +57,14 @@ export default async function Home({ searchParams }) {
             administration de l'autre, Prisma et PostgreSQL en dessous. L'administration
             passe par des actions serveur, l'API garde son contrat par clé.
           </p>
+          <nav className="liens" aria-label="À propos de ce projet">
+            <a className="lien principal" href="https://github.com/rivaldopiaplle-boop/git_api_rest_rivaldo" target="_blank" rel="noreferrer">
+              Voir le code sur GitHub
+            </a>
+            <a className="lien" href="https://git-portfolio-rivaldo.vercel.app" target="_blank" rel="noreferrer">
+              Portfolio de Rivaldo Piaplle
+            </a>
+          </nav>
         </div>
 
         <div className="stats">
