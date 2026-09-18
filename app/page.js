@@ -272,6 +272,18 @@ export default async function Home({ searchParams }) {
           </div>
         </section>
       </section>
+      <footer className="pied">
+        <p>
+          Projet de démonstration :{" "}
+          <a href="https://github.com/rivaldopiaplle-boop/git_api_rest_rivaldo" target="_blank" rel="noreferrer">
+            le code sur GitHub
+          </a>{" "}
+          ·{" "}
+          <a href="https://git-portfolio-rivaldo.vercel.app" target="_blank" rel="noreferrer">
+            le portfolio de Rivaldo Piaplle
+          </a>
+        </p>
+      </footer>
     </main>
   );
 }

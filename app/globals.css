@@ -305,3 +305,17 @@ button.danger {
     grid-template-columns: 1fr;
   }
 }
+
+/* D'où vient cette application, et qui l'a écrite. */
+.pied {
+  margin-top: 3rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgb(15 20 32 / 0.1);
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.pied a {
+  font-weight: 600;
+  text-decoration: underline;
+}
