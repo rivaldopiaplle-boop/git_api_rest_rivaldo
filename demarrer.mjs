@@ -65,6 +65,19 @@ function etape(commande, arguments_, variables) {
   return resultat.status === 0;
 }
 
+/**
+ * Sous Windows, npm passe par un shell : tuer le shell laisse Next.js tourner,
+ * qui garde le port 3000 et le moteur Prisma verrouillé. On arrête donc tout
+ * l'arbre de processus.
+ */
+function arreter(processus) {
+  if (process.platform === "win32") {
+    spawnSync("taskkill", ["/pid", String(processus.pid), "/t", "/f"], { stdio: "ignore" });
+  } else {
+    processus.kill();
+  }
+}
+
 async function attendreApi() {
   for (let essai = 0; essai < 90; essai += 1) {
     try {
@@ -121,7 +134,7 @@ const serveur = spawn("npm", ["run", "start"], {
 
 if (!(await attendreApi())) {
   console.error("\n  L'application n'a pas répondu en 90 secondes.\n");
-  serveur.kill();
+  arreter(serveur);
   process.exit(1);
 }
 console.log(`  OK  L'application répond sur ${ADRESSE}`);
@@ -129,7 +142,7 @@ console.log(`  OK  L'application répond sur ${ADRESSE}`);
 if (veutTests) {
   console.log("\n-- Tests de l'API");
   const reussi = etape("node", ["--test", "tests/api.test.mjs"], { ...variables, BASE_URL: ADRESSE });
-  serveur.kill();
+  arreter(serveur);
   console.log(reussi ? "\n  Tests passés.\n" : "\n  Tests en échec.\n");
   process.exit(reussi ? 0 : 1);
 }

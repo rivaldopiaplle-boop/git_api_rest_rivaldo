@@ -1,6 +1,7 @@
 import {
   createFoodAction,
   deleteFoodAction,
+  suggestFoodAction,
   updateFoodAction,
 } from "./actions";
 import { listFoods } from "../lib/foods";
@@ -51,17 +52,30 @@ export default async function Home({ searchParams }) {
       <section className="hero">
         <div>
           <p className="eyebrow">Next.js + Prisma + PostgreSQL</p>
-          <h1 className="title">Une API protégée par clé, et son administration.</h1>
+          <h1 className="title">
+            Une API protégée par clé, et son administration.
+          </h1>
           <p className="lead">
             Une seule application : les routes de l'API d'un côté, cette
-            administration de l'autre, Prisma et PostgreSQL en dessous. L'administration
-            passe par des actions serveur, l'API garde son contrat par clé.
+            administration de l'autre, Prisma et PostgreSQL en dessous.
+            L'administration passe par des actions serveur, l'API garde son
+            contrat par clé.
           </p>
           <nav className="liens" aria-label="À propos de ce projet">
-            <a className="lien principal" href="https://github.com/rivaldopiaplle-boop/git_api_rest_rivaldo" target="_blank" rel="noreferrer">
+            <a
+              className="lien principal"
+              href="https://github.com/rivaldopiaplle-boop/git_api_rest_rivaldo"
+              target="_blank"
+              rel="noreferrer"
+            >
               Voir le code sur GitHub
             </a>
-            <a className="lien" href="https://git-portfolio-rivaldo.vercel.app" target="_blank" rel="noreferrer">
+            <a
+              className="lien"
+              href="https://git-portfolio-rivaldo.vercel.app"
+              target="_blank"
+              rel="noreferrer"
+            >
               Portfolio de Rivaldo Piaplle
             </a>
           </nav>
@@ -88,72 +102,107 @@ export default async function Home({ searchParams }) {
       ) : null}
 
       <section className="grid">
-        <article className="panel">
-          <div className="panel-inner">
-            <div className="panel-header">
-              <h2 className="panel-title">Ajouter un plat</h2>
+        <div className="colonne">
+          <article className="panel">
+            <div className="panel-inner">
+              <div className="panel-header">
+                <h2 className="panel-title">Ajouter un plat</h2>
+              </div>
+
+              <form action={createFoodAction} className="form-grid">
+                <div className="field">
+                  <label htmlFor="name">Nom</label>
+                  <input
+                    id="name"
+                    name="name"
+                    placeholder="Légumes rôtis"
+                    required
+                    maxLength={200}
+                  />
+                </div>
+
+                <div className="field">
+                  <label htmlFor="category">Catégorie</label>
+                  <input
+                    id="category"
+                    name="category"
+                    placeholder="Plat principal"
+                    required
+                  />
+                </div>
+
+                <div className="field">
+                  <label htmlFor="description">Description</label>
+                  <textarea
+                    id="description"
+                    name="description"
+                    placeholder="Description courte"
+                    maxLength={1000}
+                  />
+                </div>
+
+                <div className="field">
+                  <label htmlFor="calories">Calories</label>
+                  <input
+                    id="calories"
+                    name="calories"
+                    type="number"
+                    min="0"
+                    step="1"
+                    placeholder="320"
+                  />
+                </div>
+
+                <div className="field">
+                  <label htmlFor="tags">Tags</label>
+                  <input
+                    id="tags"
+                    name="tags"
+                    placeholder="warm, healthy, quick"
+                  />
+                </div>
+
+                <div className="actions">
+                  <button type="submit">Ajouter</button>
+                  <span className="field-title">
+                    Les étiquettes se séparent par des virgules.
+                  </span>
+                </div>
+              </form>
             </div>
+          </article>
 
-            <form action={createFoodAction} className="form-grid">
-              <div className="field">
-                <label htmlFor="name">Nom</label>
-                <input
-                  id="name"
-                  name="name"
-                  placeholder="Légumes rôtis"
-                  required
-                  maxLength={200}
-                />
+          <article className="panel">
+            <div className="panel-inner">
+              <div className="panel-header">
+                <h2 className="panel-title">Assistant de recettes</h2>
               </div>
-
-              <div className="field">
-                <label htmlFor="category">Catégorie</label>
-                <input
-                  id="category"
-                  name="category"
-                  placeholder="Plat principal"
-                  required
-                />
-              </div>
-
-              <div className="field">
-                <label htmlFor="description">Description</label>
-                <textarea
-                  id="description"
-                  name="description"
-                  placeholder="Description courte"
-                  maxLength={1000}
-                />
-              </div>
-
-              <div className="field">
-                <label htmlFor="calories">Calories</label>
-                <input
-                  id="calories"
-                  name="calories"
-                  type="number"
-                  min="0"
-                  step="1"
-                  placeholder="320"
-                />
-              </div>
-
-              <div className="field">
-                <label htmlFor="tags">Tags</label>
-                <input
-                  id="tags"
-                  name="tags"
-                  placeholder="warm, healthy, quick"
-                />
-              </div>
-
-              <div className="actions">
-                <button type="submit">Ajouter</button>
-                <span className="field-title">Les étiquettes se séparent par des virgules.</span>
-              </div>
-            </form>
-          </div>
-        </article>
+              <p className="field-title">
+                Des ingrédients, et Mistral AI propose un plat. Sa réponse passe
+                par la même validation qu'une saisie à la main avant d'entrer en
+                base.
+              </p>
+              <form action={suggestFoodAction} className="form-grid">
+                <div className="field">
+                  <label htmlFor="ingredients">Ingrédients</label>
+                  <input
+                    id="ingredients"
+                    name="ingredients"
+                    placeholder="riz, poulet, poivrons, citron vert"
+                    required
+                    maxLength={300}
+                  />
+                </div>
+                <div className="actions">
+                  <button type="submit">Proposer et ajouter</button>
+                  <span className="field-title">
+                    Une dizaine de secondes au plus.
+                  </span>
+                </div>
+              </form>
+            </div>
+          </article>
+        </div>
 
         <section className="panel">
           <div className="panel-inner">
@@ -289,11 +338,19 @@ export default async function Home({ searchParams }) {
       <footer className="pied">
         <p>
           Projet de démonstration :{" "}
-          <a href="https://github.com/rivaldopiaplle-boop/git_api_rest_rivaldo" target="_blank" rel="noreferrer">
+          <a
+            href="https://github.com/rivaldopiaplle-boop/git_api_rest_rivaldo"
+            target="_blank"
+            rel="noreferrer"
+          >
             le code sur GitHub
           </a>{" "}
           ·{" "}
-          <a href="https://git-portfolio-rivaldo.vercel.app" target="_blank" rel="noreferrer">
+          <a
+            href="https://git-portfolio-rivaldo.vercel.app"
+            target="_blank"
+            rel="noreferrer"
+          >
             le portfolio de Rivaldo Piaplle
           </a>
         </p>

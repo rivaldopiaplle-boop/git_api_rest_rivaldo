@@ -7,6 +7,7 @@ import {
   deleteFood,
   updateFood,
 } from "../lib/foods";
+import { AssistantIndisponible, suggererPlat } from "../lib/assistant";
 
 function buildQuery(kind, message) {
   const params = new URLSearchParams();
@@ -81,6 +82,26 @@ export async function deleteFoodAction(formData) {
     }
   } catch {
     destination = buildQuery("error", "Le plat n'a pas pu être supprimé.");
+  }
+
+  redirect(destination);
+}
+
+export async function suggestFoodAction(formData) {
+  let destination;
+
+  try {
+    const proposition = await suggererPlat(formData.get("ingredients"));
+    const plat = await createFood(proposition);
+    destination = buildQuery("status", `Plat proposé par l'assistant et ajouté : ${plat.name}.`);
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      destination = buildQuery("error", "Indiquer des ingrédients (300 caractères au plus).");
+    } else if (error instanceof AssistantIndisponible) {
+      destination = buildQuery("error", "L'assistant ne répond pas pour le moment.");
+    } else {
+      destination = buildQuery("error", "Le plat proposé n'a pas pu être ajouté.");
+    }
   }
 
   redirect(destination);

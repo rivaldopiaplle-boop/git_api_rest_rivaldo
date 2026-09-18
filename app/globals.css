@@ -211,6 +211,12 @@ button.danger {
   font-size: 1.2rem;
 }
 
+.colonne {
+  display: grid;
+  gap: 20px;
+  align-content: start;
+}
+
 .form-grid {
   display: grid;
   gap: 14px;

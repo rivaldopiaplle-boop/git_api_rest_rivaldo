@@ -20,6 +20,7 @@ temps, et le fichier se marche dessus. L'historique du dépôt garde cette premi
 | `/api/foods/[id]` | PUT | Remplace le plat : corps complet attendu |
 | `/api/foods/[id]` | PATCH | Ne change que les champs envoyés |
 | `/api/foods/[id]` | DELETE | Supprime le plat |
+| `/api/foods/suggestion` | POST | Propose un plat à partir d'ingrédients, par Mistral AI, sans l'enregistrer |
 
 La clé se donne dans l'en-tête `x-api-key`. Sans elle, ou avec une mauvaise clé, l'API
 répond 401 sans rien révéler. L'interface d'administration, elle, passe par des actions
@@ -52,11 +53,25 @@ node demarrer.mjs --arreter   # arrête la base et supprime ses données
 Le fichier `.env` n'est pas suivi par Git. Au premier lancement, il est créé depuis
 `.env.example`, qui pointe déjà sur la base locale.
 
+## L'assistant de recettes
+
+`POST /api/foods/suggestion` avec `{"ingredients": "riz, poulet, poivrons"}` renvoie un plat
+proposé par Mistral AI (modèle `ministral-8b-latest`). Sa réponse passe par la même
+validation qu'une saisie à la main : un modèle de langage peut oublier un champ ou
+inventer des calories négatives, et rien n'entre en base sans avoir été vérifié.
+L'administration propose le même assistant, qui ajoute directement le plat avec
+l'étiquette `assistant`.
+
+Il faut la variable `MISTRAL_API_KEY` (offre gratuite de Mistral). Sans elle, ou si Mistral
+ne répond pas, la route répond 503 et le reste de l'API fonctionne normalement.
+
 ## Les tests
 
 `tests/api.test.mjs` parle à l'application en HTTP, comme le fera son client : la clé
 exigée, un nom vide refusé par le serveur, et le cycle complet d'une ressource, création,
-lecture, modification partielle, suppression, puis 404.
+lecture, modification partielle, suppression, puis 404. L'assistant est testé sur sa clé
+et sa validation ; l'appel réel à Mistral ne part qu'avec `ASSISTANT=1`, pour ne pas
+consommer le quota à chaque exécution de la chaîne.
 
 ```bash
 node --test tests/api.test.mjs    # l'application doit tourner
@@ -82,7 +97,8 @@ Next.js et Prisma se déploient chez Vercel, avec une base PostgreSQL gratuite c
    passe par le regroupeur de connexions, pour l'application, et la connexion directe,
    pour les migrations.
 2. Sur [vercel.com](https://vercel.com), importer ce dépôt. Vercel reconnaît Next.js.
-3. Poser trois variables d'environnement : `DATABASE_URL`, `DIRECT_URL` et `API_KEY`.
+3. Poser trois variables d'environnement : `DATABASE_URL`, `DIRECT_URL` et `API_KEY`,
+   plus `MISTRAL_API_KEY` pour l'assistant.
    La construction lance `prisma generate` elle-même : Vercel bloque les scripts
    d'installation des dépendances, et sans cette génération le client Prisma manque.
 4. Appliquer les migrations sur la base en ligne, depuis le poste de travail :

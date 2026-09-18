@@ -108,3 +108,35 @@ test("une ressource inconnue répond 404", async () => {
   const reponse = await fetch(`${BASE}/api/foods/00000000-0000-0000-0000-000000000000`, { headers: entetes() });
   assert.equal(reponse.status, 404);
 });
+
+test("sans clé, l'assistant de recettes est refusé", async () => {
+  const reponse = await fetch(`${BASE}/api/foods/suggestion`, {
+    method: "POST",
+    headers: entetes(false),
+    body: JSON.stringify({ ingredients: "riz, poulet" }),
+  });
+  assert.equal(reponse.status, 401);
+});
+
+test("l'assistant refuse une demande sans ingrédients, avant d'appeler Mistral", async () => {
+  const reponse = await fetch(`${BASE}/api/foods/suggestion`, {
+    method: "POST",
+    headers: entetes(),
+    body: JSON.stringify({ ingredients: "  " }),
+  });
+  assert.equal(reponse.status, 400);
+});
+
+// Appelle vraiment Mistral : seulement quand ASSISTANT=1, pour ne pas consommer
+// le quota à chaque exécution de la chaîne.
+test("l'assistant propose un plat valide", { skip: process.env.ASSISTANT !== "1" }, async () => {
+  const reponse = await fetch(`${BASE}/api/foods/suggestion`, {
+    method: "POST",
+    headers: entetes(),
+    body: JSON.stringify({ ingredients: "riz, poulet, poivrons, citron vert" }),
+  });
+  assert.equal(reponse.status, 200);
+  const { data } = await reponse.json();
+  assert.ok(data.name && data.category, "nom et catégorie attendus");
+  assert.ok(data.tags.includes("assistant"));
+});
