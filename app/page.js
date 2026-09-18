@@ -39,7 +39,9 @@ function formatTags(tags) {
 
 export default async function Home({ searchParams }) {
   const foods = await listFoods({ includeApiKey: true });
-  const message = getMessage(searchParams);
+  // Depuis Next.js 15, searchParams est une promesse : sans await, les messages
+  // de confirmation et d'erreur ne s'affichaient jamais.
+  const message = getMessage(await searchParams);
   const totalFoods = foods.length;
   const totalCalories = foods.reduce(
     (sum, food) => sum + (Number.isFinite(food.calories) ? food.calories : 0),
