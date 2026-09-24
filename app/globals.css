@@ -258,6 +258,37 @@ button.danger {
   scrollbar-width: thin;
 }
 
+/* Sur un écran large, la liste occupe TOUT le panneau.
+ *
+ * La première version lui donnait une hauteur fixe : la barre de défilement ne
+ * couvrait qu'une partie de la zone, et il restait du vide dessous. Le panneau
+ * devient donc une colonne collante haute comme la fenêtre, et la liste prend
+ * ce qui reste une fois l'en-tête posé. La barre court alors du haut en bas de
+ * la sous-zone, et le formulaire de gauche reste visible pendant qu'on fait
+ * défiler les plats. */
+@media (min-width: 900px) {
+  .grid > .panel:last-child {
+    position: sticky;
+    top: 24px;
+    height: calc(100dvh - 48px);
+    display: flex;
+    min-height: 0;
+  }
+
+  .grid > .panel:last-child > .panel-inner {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .grid > .panel:last-child .foods {
+    flex: 1;
+    min-height: 0;
+    max-height: none;
+  }
+}
+
 .foods::-webkit-scrollbar {
   width: 8px;
 }
