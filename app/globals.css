@@ -240,9 +240,31 @@ button.danger {
   align-items: center;
 }
 
+/* La liste des plats défile dans son propre cadre.
+ *
+ * Elle poussait la page vers le bas à mesure que le catalogue grossissait : il
+ * fallait descendre longtemps pour retrouver le reste, et ce n'était pas beau.
+ * Elle garde donc sa hauteur, et c'est elle qui défile.
+ *
+ * `overscroll-behavior: contain` empêche la page de repartir quand on arrive au
+ * bout de la liste, ce qui est le défaut le plus pénible d'un cadre défilant. */
 .foods {
   display: grid;
   gap: 16px;
+  max-height: min(70vh, 760px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 8px;
+  scrollbar-width: thin;
+}
+
+.foods::-webkit-scrollbar {
+  width: 8px;
+}
+
+.foods::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 999px;
 }
 
 .food-card {
